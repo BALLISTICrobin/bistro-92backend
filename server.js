@@ -25,6 +25,18 @@ pool.connect((err) => {
   }
 });
 
+
+app.get('/api/orders', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM orders ORDER BY created_at DESC LIMIT 100');
+    res.status(200).json({ orders: result.rows });
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 // POST endpoint to handle orders
 app.post('/api/orders', async (req, res) => {
   const { table_number, items } = req.body;
